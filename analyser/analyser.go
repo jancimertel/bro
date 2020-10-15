@@ -3,11 +3,12 @@ package analyser
 import (
 	"bitbucket.org/jmertel/bro/analyser/comments"
 	"bitbucket.org/jmertel/bro/analyser/structure"
+	"bitbucket.org/jmertel/bro/analyser/types"
 )
 
 type Analyser struct {
-	codeParser     ICodeParser
-	commentsParser ICommentsExtractor
+	codeParser     types.ICodeParser
+	commentsParser types.ICommentsExtractor
 }
 
 func NewProjectAnalyser(pathToProject string) Analyser {
@@ -19,4 +20,5 @@ func NewProjectAnalyser(pathToProject string) Analyser {
 
 func (a *Analyser) Process() {
 	a.codeParser.ParseProject(nil)
+	a.codeParser.MakeReversedRefs()
 }

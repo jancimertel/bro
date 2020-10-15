@@ -11,9 +11,11 @@ package rootpkg
 
  */
 func TryNoParam() bool {
+	// comment in function
 	return false
 }
 
+// sometginf
 func TryOneParam(b bool) bool {
 	return false
 }

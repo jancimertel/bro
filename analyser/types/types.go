@@ -9,12 +9,15 @@ type ICommentsExtractor interface {
 
 }
 
-type CommentNode struct {
-	*ast.Scope
+type Object struct {
+	*ast.Object
+	*ast.CommentGroup
 }
+
 
 type ICodeParser interface {
 	ParseProject(filter func(info os.FileInfo) bool)
-	GetComments(pkg string) []*CommentNode
+	MakeReversedRefs()
+	GetObjects(kind ast.ObjKind) map[*ast.Object]*Object
 }
 

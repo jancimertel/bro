@@ -8,7 +8,7 @@ import (
 
 func main() {
 	projectPath := os.Args[1]
-	logrus.Infof("Processing project at:1111 %s", projectPath)
+	logrus.Infof("Processing project in: %s", projectPath)
 	analyser := analyser.NewProjectAnalyser(projectPath)
 	analyser.Process()
 }
