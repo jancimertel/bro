@@ -17,7 +17,7 @@ func main() {
 	analyser.Process()
 
 	// output
-	template := defaultTemplate.NewTemplate(analyser)
+	template := defaultTemplate.NewTemplate(&analyser)
 	if err := template.Build(); err != nil {
 		log.Fatalf("Could not build template: %v", err)
 	}

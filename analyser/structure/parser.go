@@ -77,6 +77,11 @@ func (p *broStructure) GetObjects(kind ast.ObjKind) map[*ast.Object]*types.Objec
 	return p.reversedObjects[kind]
 }
 
+func (p *broStructure) GetPackages() map[string]*ast.Package {
+	return p.packageFiles
+}
+
+
 // objects from ast package are not enough - we want to store additional information to them.
 // This is one of the possibilities to do so
 func (p *broStructure) MakeReversedRefs() {

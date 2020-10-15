@@ -19,8 +19,10 @@ type ICodeParser interface {
 	ParseProject(filter func(info os.FileInfo) bool)
 	MakeReversedRefs()
 	GetObjects(kind ast.ObjKind) map[*ast.Object]*Object
+	GetPackages() map[string]*ast.Package
 }
 
 type IProvider interface {
-
+	GetObjects(kind ast.ObjKind) map[*ast.Object]*Object
+	GetPackages() map[string]*ast.Package
 }
