@@ -21,3 +21,6 @@ type ICodeParser interface {
 	GetObjects(kind ast.ObjKind) map[*ast.Object]*Object
 }
 
+type IProvider interface {
+
+}
