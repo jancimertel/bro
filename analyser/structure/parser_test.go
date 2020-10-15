@@ -41,7 +41,7 @@ func getAllGoFiles(dir string) (files []string) {
 
 func Test_broStructure_parseProject(t *testing.T) {
 
-	p := broStructure{rootPath: testingDir}
+	p := NewParser(testingDir)
 
 	t.Run("parse project non empty/nonpanic", func(t *testing.T) {
 		assert.NotPanics(t, func() {
@@ -63,9 +63,8 @@ func Test_broStructure_listDirs(t *testing.T) {
 	var out []string
 
 	t.Run("listDirs hardcoded", func(t *testing.T) {
-		p := &broStructure{
-			rootPath: testingDir,
-		}
+		p := NewParser(testingDir)
+
 		out = p.listDirs()
 		for i, fullPath := range out {
 			pathParts := strings.Split(fullPath, string(os.PathSeparator))
