@@ -23,7 +23,7 @@ func (d dummyProvider) Dump() *analyserTypes.FullDump {
 	return nil
 }
 
-func Test_defaultTemplate_Build(t *testing.T) {
+func Test_textTemplate_Build(t *testing.T) {
 	template := NewTemplate(&dummyProvider{})
 	t.Run("basic build should not fail", func(t *testing.T) {
 		assert.Nil(t, template.Build())

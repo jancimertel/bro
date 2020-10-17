@@ -20,17 +20,17 @@ Packages:
 `
 
 /*
-	Default template can output provider data in simple form - formatted text file
+	Text template can output provider data in simple form - formatted text file
 */
-type defaultTemplate struct {
+type textTemplate struct {
 	provider analyserTypes.IProvider
 }
 
-func (d defaultTemplate) Serve(port string) error {
+func (d textTemplate) Serve(port string) error {
 	panic("implement me")
 }
 
-func (d defaultTemplate) Build() error {
+func (d textTemplate) Build() error {
 	var data []struct {
 		Pkg   string
 		Funcs []string
@@ -67,7 +67,7 @@ func (d defaultTemplate) Build() error {
 }
 
 func NewTemplate(provider analyserTypes.IProvider) types.ITemplater {
-	return &defaultTemplate{
+	return &textTemplate{
 		provider,
 	}
 }
