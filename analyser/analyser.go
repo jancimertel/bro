@@ -4,30 +4,33 @@ import (
 	"bitbucket.org/jmertel/bro/analyser/comments"
 	"bitbucket.org/jmertel/bro/analyser/structure"
 	"bitbucket.org/jmertel/bro/analyser/types"
-	"go/ast"
 )
 
 type Analyser struct {
-	codeParser     types.ICodeParser
-	commentsParser types.ICommentsExtractor
-}
-
-func (a *Analyser) GetPackages() map[string]*ast.Package {
-	return a.codeParser.GetPackages()
-}
-
-func (a *Analyser) GetObjects(kind ast.ObjKind) map[*ast.Object]*types.Object {
-	return a.codeParser.GetObjects(kind)
+	types.ICodeParser
+	types.ICommentsExtractor
 }
 
 func NewProjectAnalyser(pathToProject string) Analyser {
 	return Analyser{
-		codeParser:     structure.NewParser(pathToProject),
-		commentsParser: comments.NewComments(),
+		ICodeParser:        structure.NewParser(pathToProject),
+		ICommentsExtractor: comments.NewComments(),
 	}
 }
 
 func (a *Analyser) Process() {
-	a.codeParser.ParseProject(nil)
-	a.codeParser.MakeReversedRefs()
+	a.ParseProject(nil)
+	a.MakeReversedRefs()
+}
+
+func (a *Analyser) Dump() (out *types.FullDump) {
+	out = &types.FullDump{}
+	for _, pkg := range	a.GetPackages() {
+		out.Packages = append(out.Packages, types.Package{
+			Name: pkg.Name,
+			Functions: []types.Function{},
+		})
+	}
+
+	return
 }

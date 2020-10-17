@@ -14,7 +14,6 @@ type Object struct {
 	*ast.CommentGroup
 }
 
-
 type ICodeParser interface {
 	ParseProject(filter func(info os.FileInfo) bool)
 	MakeReversedRefs()
@@ -25,4 +24,18 @@ type ICodeParser interface {
 type IProvider interface {
 	GetObjects(kind ast.ObjKind) map[*ast.Object]*Object
 	GetPackages() map[string]*ast.Package
+	Dump() *FullDump
+}
+
+type Function struct {
+	Name string `json:"name"`
+}
+
+type Package struct {
+	Name string `json:"name"`
+	Functions []Function `json:"functions"`
+}
+
+type FullDump struct {
+	Packages []Package `json:"objects"`
 }

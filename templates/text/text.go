@@ -1,4 +1,4 @@
-package _default
+package text
 
 import (
 	analyserTypes "bitbucket.org/jmertel/bro/analyser/types"
@@ -58,7 +58,7 @@ func (d defaultTemplate) Build() error {
 		return data[i].Pkg < data[j].Pkg
 	})
 
-	t := template.Must(template.New("default").Parse(tmpl))
+	t := template.Must(template.New("text").Parse(tmpl))
 	outFile, err := os.Create("out")
 	if err != nil {
 		return err

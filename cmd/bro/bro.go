@@ -2,7 +2,7 @@ package main
 
 import (
 	"bitbucket.org/jmertel/bro/analyser"
-	defaultTemplate "bitbucket.org/jmertel/bro/templates/default"
+	defaultTemplate "bitbucket.org/jmertel/bro/templates/text"
 	"github.com/sirupsen/logrus"
 	"log"
 	"os"
