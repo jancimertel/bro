@@ -2,10 +2,10 @@ package markdown
 
 import (
 	analyserTypes "bitbucket.org/jmertel/bro/analyser/types"
+	"bitbucket.org/jmertel/bro/templates"
 	"bitbucket.org/jmertel/bro/templates/types"
 	"go/ast"
 	"os"
-	"strings"
 	"text/template"
 )
 
@@ -14,7 +14,7 @@ const tmpl = `
 {{.PkgComment}}
 ## Functions
 {{range $func := .Funcs}}` +
-`-{{$func.Name}}({{$func.Signature.Text}})
+	`-{{$func.Name}}({{$func.Signature.Text}})
 {{$func.Comment}}
 {{end}}
 `
@@ -47,26 +47,18 @@ func (d *markdownTemplate) processPackage(pkg *ast.Package) error {
 	buf := types.TmplPkg{
 		Pkg: pkg.Name,
 	}
-	dirPrefix := strings.TrimPrefix(d.provider.GetRootDir(), "./")
+	outputPath, err := templates.GetOutputPathForPackage(d.provider.GetRootDir(), pkg)
+	if err != nil {
+		return err
+	}
+	// in the markdown, we want path which starts with separator
+	buf.PkgPath = string(os.PathSeparator) + outputPath
 
 	funcs := d.provider.GetObjects(ast.Fun)
-	for path, file := range pkg.Files {
-		if buf.PkgPath == "" {
-			pkgPath := strings.TrimPrefix(path, dirPrefix)
-			if strings.Contains(pkgPath, string(os.PathSeparator)) {
-				pkgPath = pkgPath[0:strings.LastIndex(pkgPath, string(os.PathSeparator))]
-			} else {
-				pkgPath = ""
-			}
-			pkgPath = string(os.PathSeparator) + pkgPath
-
-			buf.PkgPath = pkgPath
-		}
-
+	for _, file := range pkg.Files {
 		for _, obj := range file.Scope.Objects {
-
 			funcData := types.TmplFunc{
-				Name: obj.Name,
+				Name:    obj.Name,
 				Comment: funcs[obj].CommentGroup.Text(),
 			}
 			funcData.BuildSignature(obj.Decl.(*ast.FuncDecl))

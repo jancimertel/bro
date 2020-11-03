@@ -13,11 +13,11 @@ func main() {
 	logrus.Infof("Processing project in: %s", projectPath)
 
 	// analysis
-	analyser := analyser.NewProjectAnalyser(projectPath)
-	analyser.Process()
+	analyserInst := analyser.NewProjectAnalyser(projectPath)
+	analyserInst.Process()
 
 	// output
-	template := markdownTemplate.NewTemplate(&analyser)
+	template := markdownTemplate.NewTemplate(&analyserInst)
 	if err := template.Build(); err != nil {
 		log.Fatalf("Could not build template: %v", err)
 	}

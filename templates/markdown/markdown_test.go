@@ -2,6 +2,7 @@ package markdown
 
 import (
 	"bitbucket.org/jmertel/bro/analyser"
+	"bitbucket.org/jmertel/bro/templates"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"path"
@@ -13,11 +14,15 @@ func fileExists(filename string) bool {
 	if os.IsNotExist(err) {
 		return false
 	}
+	if info == nil {
+		return false
+	}
 	return !info.IsDir()
 }
 
 func Test_textTemplate_processPackage(t *testing.T) {
-	provider := analyser.NewProjectAnalyser("../../examples/teststructure")
+	rootPath := "../../examples/teststructure"
+	provider := analyser.NewProjectAnalyser(rootPath)
 	provider.Process()
 	template := NewTemplate(&provider).(*markdownTemplate)
 	dummyPackages := template.provider.GetPackages()
@@ -27,6 +32,10 @@ func Test_textTemplate_processPackage(t *testing.T) {
 		assert.NotPanics(t, func() {
 			assert.Nil(t, template.processPackage(rootPackage))
 		})
-		assert.True(t, fileExists(path.Join(os.TempDir(), rootPackage.Name, rootPackage.Name + ".md")))
+		outputPath, err := templates.GetOutputPathForPackage(rootPath, rootPackage)
+		assert.Nil(t, err)
+		pathToMdFile := path.Join(outputPath, rootPackage.Name) + ".md"
+		assert.True(t, fileExists(pathToMdFile))
+		os.RemoveAll(pathToMdFile)
 	})
 }
