@@ -50,14 +50,13 @@ func (d *markdownTemplate) processPackage(pkg *ast.Package) error {
 	buf := types.TmplPkg{
 		Pkg: pkg.Name,
 	}
-	outputPath, err := templates.GetOutputPathForPackage(d.provider.GetRootDir(), pkg)
+	projectPath, err := templates.GetPathForPackage(d.provider.GetRootDir(), pkg)
 	if err != nil {
 		return err
 	}
-	outputPath = path.Join(d.outDir, outputPath)
 
 	// in the markdown, we want path which starts with separator
-	buf.PkgPath = string(os.PathSeparator) + outputPath
+	buf.PkgPath = string(os.PathSeparator) + projectPath
 
 	funcs := d.provider.GetObjects(ast.Fun)
 	for _, file := range pkg.Files {
@@ -75,6 +74,7 @@ func (d *markdownTemplate) processPackage(pkg *ast.Package) error {
 		}
 	}
 
+	outputPath := path.Join(d.outDir, projectPath)
 	if outputPath != "" {
 		if err := os.MkdirAll(outputPath, os.ModePerm); err != nil {
 			return err

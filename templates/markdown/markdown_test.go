@@ -32,7 +32,7 @@ func Test_textTemplate_processPackage(t *testing.T) {
 		assert.NotPanics(t, func() {
 			assert.Nil(t, template.processPackage(rootPackage))
 		})
-		outputPath, err := templates.GetOutputPathForPackage(rootPath, rootPackage)
+		outputPath, err := templates.GetPathForPackage(rootPath, rootPackage)
 		assert.Nil(t, err)
 		pathToMdFile := path.Join(outputPath, rootPackage.Name) + ".md"
 		assert.True(t, fileExists(pathToMdFile))

@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func GetOutputPathForPackage(rootPath string, pkg *ast.Package) (string, error) {
+func GetPathForPackage(rootPath string, pkg *ast.Package) (string, error) {
 	if len(pkg.Files) == 0 {
 		return "", errors.New("package should not exist - empty file list")
 	}
