@@ -5,6 +5,7 @@ import (
 	"bitbucket.org/jmertel/bro/templates/types"
 	"go/ast"
 	"os"
+	"path"
 	"sort"
 	"text/template"
 )
@@ -30,7 +31,7 @@ func (d textTemplate) Serve(port string) error {
 	panic("implement me")
 }
 
-func (d textTemplate) Build() error {
+func (d textTemplate) Build(outDir string) error {
 	var data []struct {
 		Pkg   string
 		Funcs []string
@@ -48,7 +49,7 @@ func (d textTemplate) Build() error {
 		for _, file := range pkg.Files {
 			for _, obj := range file.Scope.Objects {
 				if obj.Kind == ast.Fun {
-					data[len(data) - 1].Funcs = append(data[len(data) - 1].Funcs, obj.Name)
+					data[len(data)-1].Funcs = append(data[len(data)-1].Funcs, obj.Name)
 				}
 			}
 		}
@@ -58,11 +59,17 @@ func (d textTemplate) Build() error {
 		return data[i].Pkg < data[j].Pkg
 	})
 
-	t := template.Must(template.New("text").Parse(tmpl))
-	outFile, err := os.Create("out")
+	if outDir != "" {
+		if err := os.MkdirAll(outDir, os.ModePerm); err != nil {
+			return err
+		}
+	}
+	outFile, err := os.Create(path.Join(outDir, "out.txt"))
 	if err != nil {
 		return err
 	}
+
+	t := template.Must(template.New("text").Parse(tmpl))
 	return t.Execute(outFile, data)
 }
 

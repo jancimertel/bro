@@ -6,6 +6,7 @@ import (
 	"bitbucket.org/jmertel/bro/templates/types"
 	"go/ast"
 	"os"
+	"path"
 	"text/template"
 )
 
@@ -27,13 +28,15 @@ var mdTemplate *template.Template
 */
 type markdownTemplate struct {
 	provider analyserTypes.IProvider
+	outDir string
 }
 
 func (d markdownTemplate) Serve(port string) error {
 	panic("implement me")
 }
 
-func (d *markdownTemplate) Build() error {
+func (d *markdownTemplate) Build(outDir string) error {
+	d.outDir = outDir
 	for _, pkg := range d.provider.GetPackages() {
 		if err := d.processPackage(pkg); err != nil {
 			return err
@@ -51,12 +54,17 @@ func (d *markdownTemplate) processPackage(pkg *ast.Package) error {
 	if err != nil {
 		return err
 	}
+	outputPath = path.Join(d.outDir, outputPath)
+
 	// in the markdown, we want path which starts with separator
 	buf.PkgPath = string(os.PathSeparator) + outputPath
 
 	funcs := d.provider.GetObjects(ast.Fun)
 	for _, file := range pkg.Files {
 		for _, obj := range file.Scope.Objects {
+			if _, exists := funcs[obj]; !exists {
+				continue
+			}
 			funcData := types.TmplFunc{
 				Name:    obj.Name,
 				Comment: funcs[obj].CommentGroup.Text(),
@@ -67,7 +75,12 @@ func (d *markdownTemplate) processPackage(pkg *ast.Package) error {
 		}
 	}
 
-	outFile, err := os.Create(buf.Pkg + ".md")
+	if outputPath != "" {
+		if err := os.MkdirAll(outputPath, os.ModePerm); err != nil {
+			return err
+		}
+	}
+	outFile, err := os.Create(path.Join(outputPath, buf.Pkg) + ".md")
 	if err != nil {
 		return err
 	}
@@ -77,6 +90,7 @@ func (d *markdownTemplate) processPackage(pkg *ast.Package) error {
 func NewTemplate(provider analyserTypes.IProvider) types.ITemplater {
 	return &markdownTemplate{
 		provider,
+		"",
 	}
 }
 

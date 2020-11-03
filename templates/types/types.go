@@ -8,7 +8,7 @@ import (
 
 type ITemplater interface {
 	Serve(port string) error
-	Build() error
+	Build(outDir string) error
 }
 
 type TmplPkg struct {
