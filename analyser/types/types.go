@@ -19,12 +19,14 @@ type ICodeParser interface {
 	MakeReversedRefs()
 	GetObjects(kind ast.ObjKind) map[*ast.Object]*Object
 	GetPackages() map[string]*ast.Package
+	GetRootDir() string
 }
 
 type IProvider interface {
 	GetObjects(kind ast.ObjKind) map[*ast.Object]*Object
 	GetPackages() map[string]*ast.Package
 	Dump() *FullDump
+	GetRootDir() string
 }
 
 type Function struct {

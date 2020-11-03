@@ -34,3 +34,4 @@ func (a *Analyser) Dump() (out *types.FullDump) {
 
 	return
 }
+

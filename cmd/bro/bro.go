@@ -2,7 +2,7 @@ package main
 
 import (
 	"bitbucket.org/jmertel/bro/analyser"
-	defaultTemplate "bitbucket.org/jmertel/bro/templates/text"
+	markdownTemplate "bitbucket.org/jmertel/bro/templates/markdown"
 	"github.com/sirupsen/logrus"
 	"log"
 	"os"
@@ -17,7 +17,7 @@ func main() {
 	analyser.Process()
 
 	// output
-	template := defaultTemplate.NewTemplate(&analyser)
+	template := markdownTemplate.NewTemplate(&analyser)
 	if err := template.Build(); err != nil {
 		log.Fatalf("Could not build template: %v", err)
 	}

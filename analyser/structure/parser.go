@@ -81,6 +81,9 @@ func (p *broStructure) GetPackages() map[string]*ast.Package {
 	return p.packageFiles
 }
 
+func (p *broStructure) GetRootDir() string {
+	return p.rootPath
+}
 
 // objects from ast package are not enough - we want to store additional information to them.
 // This is one of the possibilities to do so

@@ -1,6 +1,7 @@
 package analyser
 
 import (
+	analyserTypes "bitbucket.org/jmertel/bro/analyser/types"
 	"github.com/stretchr/testify/assert"
 	"go/ast"
 	"testing"
